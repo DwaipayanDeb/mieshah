@@ -1,6 +1,7 @@
 # mieshah
 # This Python package calculates light scattering properties/parameters of spheres by using Mie theory. 
-This has been developed from a mie theory program originally written in FORTRAN and published in the paper: Ghanshyam A. Shah, "Numerical Methods for Mie Theory of Scattering by a Sphere",Kodaikanal Obs. Bull. Soc.(1977) 2, 42-63.  
+This has been developed from a mie theory program originally written in FORTRAN and published in the paper: Ghanshyam A. Shah, "Numerical Methods for Mie Theory of Scattering by a Sphere",Kodaikanal Obs. Bull. Soc.(1977) 2, 42-63. 
+- Python form developed by Dwaipayan Deb (2025)
 
 Install command: 
 ---------------
