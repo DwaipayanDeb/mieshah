@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Test Codes — Comprehensive Documentation and Explanations</title>
+  <style>
+    body{font-family:Inter, system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial; max-width:900px;margin:36px auto;color:#111}
+    header{border-bottom:1px solid #eee;padding-bottom:12px;margin-bottom:22px}
+    h1{font-size:28px;margin:0}
+    h2{font-size:20px;margin-top:28px}
+    pre{background:#f8f8f8;border:1px solid #eee;padding:12px;overflow:auto}
+    .section{padding:14px 0;border-top:1px dashed #eee}
+    .insight{background:#fff9e6;border-left:4px solid #ffd42a;padding:10px;margin:14px 0;font-size:15px}
+    .explanation{background:#e8f5e9;border-left:4px solid #4caf50;padding:10px;margin:14px 0;font-size:15px}
+    .variables{background:#e3f2fd;border-left:4px solid #2196f3;padding:10px;margin:14px 0;font-size:15px}
+    ul{margin-top:0}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Test Code Documentation</h1>
+    <p>This documentation provides an in-depth breakdown of the provided test Python codes (<code>mieshah.py</code>, <code>mieshah_basic.py</code>, <code>mie_test.py</code>, <code>test.py</code>, <code>test2.py</code>, and <code>test3.py</code>), highlighting their purposes, methodologies, and the relationships between them.</p>
+  </header>
+
+  <section class="section">
+    <h2>General Overview</h2>
+    <p>All scripts revolve around implementing and testing <strong>Mie scattering theory</strong>, which describes the scattering of electromagnetic waves by spherical particles. The codes range from core numerical solvers to demonstration scripts for visualizing scattering parameters.</p>
+    <div class="insight">
+      <strong>Insight:</strong> These scripts demonstrate a modular design. Core computation logic is isolated in <code>mieshah.py</code> and <code>mieshah_basic.py</code>, while test scripts configure inputs, run calculations, and display or store results. This separation promotes reusability and simplifies debugging.
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Key Variables and Parameters</h2>
+    <div class="variables">
+      <ul>
+        <li><code>ps</code>: Particle radius (microns), or a two-element list defining the lower and upper bounds of a size range.</li>
+        <li><code>wl</code>: Wavelength of the incident light (microns). Determines interaction regime (Rayleigh, Mie, or geometric optics).</li>
+        <li><code>m</code>: Tuple containing the real and imaginary parts of the complex refractive index.</li>
+        <li><code>f</code>: Size distribution weighting function (string form, parsed via SymPy).</li>
+        <li><code>incr</code>: Step size for integrating over a size range when a distribution is used.</li>
+        <li><code>X</code>: Size parameter, <code>2π·ps / wl</code>, controls scattering regime.</li>
+        <li><code>QEXT, QSCA, QABS</code>: Extinction, scattering, and absorption efficiencies, computed from Mie coefficients.</li>
+        <li><code>ALBED</code>: Ratio QSCA/QEXT, indicating fraction of extinction due to scattering.</li>
+        <li><code>ASYM</code>: Asymmetry parameter, quantifying forward vs backward scattering bias.</li>
+        <li><code>QBAK</code>: Backscattering efficiency.</li>
+        <li><code>I_perp, I_parl</code>: Intensity components perpendicular and parallel to the scattering plane.</li>
+        <li><code>Polar</code>: Degree of linear polarization.</li>
+        <li><code>p_theta</code>: Normalized angular phase function.</li>
+        <li><code>theta</code>: Array of scattering angles in degrees.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>File-by-File Detailed Notes</h2>
+    <h3>mieshah.py</h3>
+    <div class="explanation">
+      Core implementation of Mie scattering. Includes size distribution integration logic, symbolic handling of weighting functions, and computation of full scattering matrices. Uses numerical stability optimizations like downward recursion for Bessel functions.
+    </div>
+
+    <h3>mieshah_basic.py</h3>
+    <div class="explanation">
+      A stripped-down version focusing on single-size computations. Useful for quick validation of theoretical formulas or debugging the main algorithm without the complexity of distribution integration.
+    </div>
+
+    <h3>mie_test.py</h3>
+    <div class="explanation">
+      Demonstrates both single-size and distribution cases. Prints computed efficiencies, albedo, and phase/polarization arrays, then generates polarization and phase function plots. Serves as a practical validation of <code>mieshah</code> computations.
+    </div>
+
+    <h3>test.py</h3>
+    <div class="explanation">
+      Likely a small exploratory script for trying specific parameter combinations, verifying numerical convergence, or testing output formats.
+    </div>
+
+    <h3>test2.py</h3>
+    <div class="explanation">
+      Contains <code>mieshah2</code>, a variation specialized for single particle sizes. Emphasizes clarity and step-by-step computation, outputting intermediate variables to files for in-depth debugging.
+    </div>
+
+    <h3>test3.py</h3>
+    <div class="explanation">
+      Extends <code>mieshah2</code> to handle size distributions. Includes integration loops, normalization factors, and function parsing from strings. This mirrors the functionality in <code>mieshah.py</code> but in a possibly more verbose, experimental form.
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Notable Implementation Insights</h2>
+    <ul>
+      <li>Efficient array handling via pre-allocation to minimize memory overhead in inner loops.</li>
+      <li>Integration over particle sizes implemented as weighted summations based on user-specified functions.</li>
+      <li>Plots and printed outputs act as both visual validation and numerical debugging tools.</li>
+      <li>Heavy reliance on mathematical rigor: Bessel functions, complex arithmetic, and convergence criteria are carefully addressed.</li>
+      <li>Supports both quick tests and large parameter sweeps for research purposes.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Generated from the provided test scripts — expanded with detailed commentary to explain structure, purpose, and computational approaches without including runtime examples.</p>
+  </footer>
+</body>
+</html>

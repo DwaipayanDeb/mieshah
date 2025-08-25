@@ -1,0 +1,1 @@
+This folder contains the programs and data files to compare phase function from Fig-5.7a Hapke 2005  ( X=100 and m=1.5+0.0j) with other packages

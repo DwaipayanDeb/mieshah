@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>pymieshah — Documentation with Insights, Explanations, Variable Definitions, and Examples</title>
+  <style>
+    body{font-family:Inter, system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial; max-width:900px;margin:36px auto;color:#111}
+    header{border-bottom:1px solid #eee;padding-bottom:12px;margin-bottom:22px}
+    h1{font-size:28px;margin:0}
+    h2{font-size:20px;margin-top:28px}
+    pre{background:#f8f8f8;border:1px solid #eee;padding:12px;overflow:auto}
+    .sig{font-family:Menlo, Monaco, monospace;background:#f2f7ff;padding:6px 8px;border-radius:6px;display:inline-block}
+    dl{margin-top:12px}
+    dt{font-weight:700;margin-top:8px}
+    dd{margin-left:0;margin-bottom:8px}
+    .section{padding:14px 0;border-top:1px dashed #eee}
+    footer{color:#666;font-size:13px;margin-top:28px}
+    .params{background:#fafafa;border-left:4px solid #e0e7ff;padding:10px;margin:10px 0}
+    .insight{background:#fff9e6;border-left:4px solid #ffd42a;padding:10px;margin:14px 0;font-size:15px}
+    .explanation{background:#e8f5e9;border-left:4px solid #4caf50;padding:10px;margin:14px 0;font-size:15px}
+    .variables{background:#e3f2fd;border-left:4px solid #2196f3;padding:10px;margin:14px 0;font-size:15px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>pymieshah</h1>
+    <p>Auto-generated HTML documentation (from docstrings) for <code>pymieshah.py</code>, with added insights, explanations, definitions of variables, and extended examples for various use cases.</p>
+  </header>
+
+  <section>
+    <h2>Module summary</h2>
+    <p>This module provides <strong>miescatter</strong>, a class for Mie scattering calculations for spherical particles.</p>
+    <div class="insight">
+      <strong>Insight:</strong> The design follows a straightforward procedural approach inside a class, with heavy use of instance attributes to store intermediate and final results.
+    </div>
+    <div class="explanation">
+      <strong>Explanation:</strong> The code is essentially a Python translation of a classic Mie scattering algorithm. It computes scattering efficiency factors and angular scattering patterns based on given optical constants and particle sizes, storing results for later plotting or export.
+    </div>
+    <div class="variables">
+      <strong>Key Physical Variables:</strong>
+      <ul>
+        <li><code>X</code>: Size parameter, defined as <code>2π * radius / wavelength</code>.</li>
+        <li><code>QEXT</code>: Extinction efficiency (total attenuation of light).</li>
+        <li><code>QSCA</code>: Scattering efficiency.</li>
+        <li><code>QABS</code>: Absorption efficiency.</li>
+        <li><code>QBAK</code>: Backscattering efficiency.</li>
+        <li><code>ALBED</code>: Single scattering albedo = QSCA / QEXT.</li>
+        <li><code>ASYM</code>: Asymmetry parameter (mean cosine of scattering angle).</li>
+        <li><code>I_perp, I_parl</code>: Scattered intensities perpendicular and parallel to the scattering plane.</li>
+        <li><code>Polar</code>: Degree of linear polarization.</li>
+        <li><code>p_theta</code>: Phase function at angle θ.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="miescatter">
+    <h2>Class: <span class="sig">miescatter</span></h2>
+    <p>Class for Mie scattering calculations for spherical particles.</p>
+
+    <div class="params">
+      <strong>Parameters</strong>
+      <dl>
+        <dt>ps</dt>
+        <dd>float, int, or list — Particle size or range of particle sizes.</dd>
+        <dt>wl</dt>
+        <dd>float — Wavelength of incident light.</dd>
+        <dt>m</dt>
+        <dd>tuple — Complex refractive index as (real, imaginary).</dd>
+        <dt>incr</dt>
+        <dd>float, optional — Increment for particle size distribution.</dd>
+        <dt>f</dt>
+        <dd>str, optional — Frequency distribution function as a string (e.g., 'x**-2').</dd>
+      </dl>
+    </div>
+
+    <div class="explanation">
+      <strong>Explanation:</strong> The constructor stores all user inputs as attributes, preparing them for later computation. If <code>ps</code> is a list, the program will iterate over the specified range with step <code>incr</code>. The frequency distribution function <code>f</code> is applied when averaging scattering results over a distribution.
+    </div>
+
+    <h3>Constructor</h3>
+    <p class="sig">__init__(**kwargs)</p>
+
+    <h3>Attributes set on initialization</h3>
+    <ul>
+      <li><code>ps, wl, m, incr, f</code> — input parameters</li>
+      <li><code>I_perp, I_parl, theta, p_theta, Polar</code> — result lists populated after calculation</li>
+      <li>Various numeric results after running calculations.</li>
+    </ul>
+
+    <div class="explanation">
+      <strong>Explanation:</strong> Before running <code>miecalc()</code>, these arrays remain empty. This lazy evaluation approach prevents unnecessary computation until explicitly requested.
+    </div>
+
+    <h3>Methods</h3>
+    <h4 class="sig">miecalc()</h4>
+    <p>Perform Mie scattering calculations and write results to output files.</p>
+    <div class="explanation">
+      <strong>Explanation:</strong> This method loops through scattering angles, computing amplitude functions and phase functions using internal formulas. It sums over contributions from multiple particle sizes if a range is given, weighting each by <code>f</code>. It then writes summary metrics (Q values, asymmetry, etc.) to a text file and angular scattering data to CSV.
+    </div>
+
+    <h4 class="sig">mie_theta(ITH, a_range) — inner function</h4>
+    <p>Calculate Mie scattering parameters for a given scattering angle.</p>
+    <div class="explanation">
+      <strong>Explanation:</strong> This inner routine is where most heavy computation happens. It calculates perpendicular and parallel intensities, polarization, and phase functions for a given angle. It uses trigonometric expansions of scattering coefficients (a_n, b_n) obtained from Bessel and Hankel functions.
+    </div>
+  </section>
+
+  <section class="section" id="examples">
+    <h2>Example usage</h2>
+    <pre>
+# Single particle size
+from matplotlib import pyplot as plt
+mies = miescatter(ps=100, wl=6.283185307, m=(1.5,0.0))
+mies.miecalc()
+plt.plot(mies.theta, mies.Polar)
+plt.show()
+
+# Particle size distribution with power-law weighting
+mies_dist = miescatter(ps=[0.1, 2.0], wl=0.55, m=(1.33, 0.01), incr=0.01, f='x**-3')
+mies_dist.miecalc()
+plt.plot(mies_dist.theta, mies_dist.Polar, label='Power-law distribution')
+plt.legend()
+plt.show()
+
+# Large particles, visible light
+mies_large = miescatter(ps=10.0, wl=0.55, m=(1.5, 0.001))
+mies_large.miecalc()
+plt.semilogy(mies_large.theta, mies_large.p_theta, label='Phase function')
+plt.legend()
+plt.show()
+    </pre>
+
+    <div class="explanation">
+      <strong>Explanation:</strong>
+      <ul>
+        <li>The first case computes polarization for a single particle size with a large size parameter.</li>
+        <li>The second demonstrates averaging over a particle size distribution using a power-law size frequency.</li>
+        <li>The third shows scattering by large particles where forward scattering dominates, plotted on a logarithmic scale.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>Generated from <code>pymieshah.py</code> — docstrings + AI insights, explanations, variable definitions, and multiple usage examples.</p>
+  </footer>
+</body>
+</html>
