@@ -1,0 +1,1 @@
+In previous version (0.0.1) the averaged values of quantities such as ALBED, QBAK, QEXT, etc. were not coming correctly when a frequesncy distribution is used. This is solved in the present version (0.0.2)
