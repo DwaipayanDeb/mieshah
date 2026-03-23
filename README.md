@@ -72,6 +72,7 @@ mies = miescatter(
 - `theta=[min,max]` runs the scattering phase calculation from `min` degrees to `max` degrees.
 - If `theta` is omitted, default range is `[0,180]`.
 - `theta` must be a list of two values; otherwise the code exits with a message.
+- However single `int` value is allowed e.g. `theta=45`
 
 ## Behavior
 
