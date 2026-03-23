@@ -48,6 +48,56 @@ plt.ylabel('Phase Function')
 plt.title('Phase Function')
 plt.show()
 ```
+
+
+## New feature: `theta` input argument in v0.0.3
+
+The `miescatter` class now supports an optional `theta` argument in the constructor, which sets the angular computation window for phase function outputs.
+
+### Usage
+
+```python
+from miesh2 import miescatter
+
+mies = miescatter(
+    ps=[1, 5],
+    wl=0.5,
+    m=(1.5, 0.01),
+    f='x**-2',
+    incr=0.1,
+    theta=[10, 45]
+)
+```
+
+- `theta=[min,max]` runs the scattering phase calculation from `min` degrees to `max` degrees.
+- If `theta` is omitted, default range is `[0,180]`.
+- `theta` must be a list of two values; otherwise the code exits with a message.
+
+## Behavior
+
+- With `theta=[10,45]`, the method computes results only for angles 10 through 45 degrees.
+- Internally, `miecalc()` iterates `for ITH in range(self.th_min+1,self.th_max+2)` and converts each angle to radians for phase calculations.
+
+## Output
+
+- `mie1.out` contains global sphere averaged optical parameters:
+  - `X`, `QSCA`, `QEXT`, `QABS`, `ALBED`, `ASYM`, `QPR`, `QBAK`.
+- `mie2.csv` contains per-angle data:
+  - `theta`, `I_perp`, `I_para`, `Polar`, `p_theta`.
+
+## Dependencies
+
+- `numpy`
+- `sympy`
+- `dimpy` (or replacement array initialization)
+
+## Notes
+
+- If `ps` is a range and `f` is supplied, an effective weighted average (frequency distribution) is computed.
+- If `ps` is a single value, `f` should be omitted.
+
+
+
 # Zenodo Release
 
 Zenodo project doi:https://doi.org/10.5281/zenodo.15380220
