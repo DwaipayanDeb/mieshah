@@ -1,4 +1,4 @@
-#v0.0.2
+#v0.0.3
 from sympy import symbols, sympify
 import numpy as np
 from dimpy import *
@@ -29,12 +29,28 @@ class miescatter:
         self.wl = kwargs.get('wl', None)
         self.m = kwargs.get('m', None)
         self.incr = kwargs.get('incr', None)
+        self.theta_in=kwargs.get('theta', None)
         self.I_perp=[]
         self.I_parl=[]
         self.theta=[]
         self.p_theta=[]
-        self.Polar=[]        
- 
+        self.Polar=[]  
+
+
+        if self.theta_in is not None:
+            if type(self.theta_in) == list and len(self.theta_in) == 2:
+                self.th_min = min(self.theta_in)
+                self.th_max = max(self.theta_in)
+            elif type(self.theta_in)==float or type(self.theta_in)==int:
+                self.th_min = int(self.theta_in)
+            else:
+                print("Invalid input\nPlease enter a valid theta (e.g. theta=30 or theta=[10,45])")
+                print("Exiting...")
+                exit()
+            
+        else:
+            self.th_min = 0
+            self.th_max = 180
 
         if self.ps==None or self.wl==None or type(self.m)!=tuple:
             print("Invalid input\nPlease enter a valid ps, wl, and m (e.g. ps=0.1 or ps=[0.01:0.1], wl=0.365, m=(1.403,0.024))")
@@ -299,7 +315,7 @@ class miescatter:
                         Phase_func_list.append(2*(SS1+SS2)/(QSCA*(X**2))*frequency*DK)
                         tot_freq=frequency*DK+tot_freq
 
-                        if THETA==0:
+                        if THETA==self.th_min:
                             X_.append(X*frequency*DK)
                             QABS_.append(QABS*frequency*DK)
                             QSCA_.append(QSCA*frequency*DK)
@@ -316,7 +332,7 @@ class miescatter:
                     Phase_func_list.append(2*(SS1+SS2)/(QSCA*(X**2)))
                     tot_freq=1
 
-                    if THETA==0:
+                    if THETA==self.th_min:
                         X_.append(X)
                         QABS_.append(QABS)
                         QSCA_.append(QSCA)
@@ -335,7 +351,7 @@ class miescatter:
             POLAR=(SSS1-SSS2)/TSS
 
             # THE 'BUG FIX' WAS APPLIED ONLY HERE
-            if len(a_)!=1 and THETA==0:
+            if len(a_)!=1 and THETA==self.th_min:
                 self.X = np.sum(X_)/tot_freq
                 self.QABS = np.sum(QABS_)/tot_freq
                 self.QSCA = np.sum(QSCA_)/tot_freq
@@ -348,7 +364,7 @@ class miescatter:
                 self.SCA = np.sum(SCA_)/tot_freq
                 self.NN = NN
 
-            elif len(a_) == 1 and THETA==0:
+            elif len(a_) == 1 and THETA==self.th_min:
                 self.X = X
                 self.QBAK = QBAK
                 self.QEXT = QEXT
@@ -366,14 +382,20 @@ class miescatter:
             self.theta.append(THETA)
             self.p_theta.append(Phase_func)
             self.Polar.append(POLAR)
+            #self.Pg = Phase_func
 
             f2.write(f"{THETA},{SSS1},{SSS2},{POLAR},{Phase_func}\n")  
 
-        f2.write(f"theta,I_perp,I_para,Polar,p_theta\n")  
+        f2.write(f"theta,I_perp,I_para,Polar,p_theta\n") 
 
-        for ITH in range (1,182,1):
-            print(f"Calculating for: theta= {ITH-1} deg.", end="\r", flush=True)
+        if type(self.theta_in)==float or type(self.theta_in)==int:
+            ITH = self.th_min+1
             mie_theta(ITH,self.ps)
+        else:
+            for ITH in range (self.th_min+1,self.th_max+2,1):
+                print(f"Calculating for: theta= {ITH-1} deg.", end="\r", flush=True)
+                mie_theta(ITH,self.ps)
+        
 
         print("\nProcess competed.\nPlease see the output files for results")
 
