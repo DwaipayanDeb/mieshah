@@ -1,0 +1,298 @@
+Metadata-Version: 2.4
+Name: mieshah
+Version: 1.1.1
+Summary: A Python package for calculating light scattering properties/parameters of spheres using Mie theory.
+Author: Dwaipayan Deb
+License: Copyright (c) 2018 The Python Packaging Authority
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Physics
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: sympy
+Requires-Dist: dimpy
+Requires-Dist: tablefile
+Dynamic: license-file
+
+# mieshah (v1.1.1)
+
+A powerful, high-performance Python package for calculating light scattering properties and parameters of spherical particles using Mie theory. It supports both **monodisperse** (single particle size) and **polydisperse** (particle size distributions) systems.
+
+Developed from a Mie theory foundation originally published in:
+*Ghanshyam A. Shah, "Numerical Methods for Mie Theory of Scattering by a Sphere", Kodaikanal Obs. Bull. Soc. (1977) 2, 42-63*, this package has been completely modernized with state-of-the-art numerical calculation methods to ensure high performance, numerical stability, and precision.
+
+* **Developer:** Dwaipayan Deb (2026)
+* **Zenodo DOI:** [10.5281/zenodo.15380219](https://doi.org/10.5281/zenodo.15380219)
+
+---
+
+## Key Features
+
+* **Identical, Validated Results:** Yields results that are **numerically identical** to other established Mie scattering codes (e.g., `PyMieScatt`, `miepython`), using Wiscombe's recurrence criteria.
+* **Built-in Symbolic Size Distributions:** Specify any size distribution as an arbitrary symbolic string (e.g., `f="x**-2"` or `f="r**2"`). The package automatically handles analytical parsing, discretization, and integration.
+* **Physically Correct Polydisperse Averages:** Implements correct physical weighting formulas for size distributions (e.g., ratio-of-averages for bulk albedo, and scattering cross-section weighting for phase functions and intensities), avoiding incorrect arithmetic averaging.
+* **Flexible Angular Windowing (`theta`):** Restrict calculations to specific scattering angle windows (e.g., `theta=[10, 45]`) or custom angular distributions to save computational overhead and disk space.
+* **Full Spectral Calculation Suite:** Easily parse spectral datasets (wavelength/wavenumber and complex refractive index files) and run batch calculations over a spectrum in one step.
+* **Interactive Help System:** Built-in interactive console help. Just type `help()` or call `Help.show_all()` to access reference material.
+
+---
+
+## Installation
+
+Install directly via `pip`:
+```bash
+pip install mieshah
+```
+
+### Dependencies
+* `numpy`
+* `sympy`
+* `dimpy`
+* `tablefile`
+
+---
+
+## Usage Guide & Examples
+
+### 1. Single Wavelength Analysis (`miescatter`)
+Perform single-wavelength calculations for a single size particle (monodisperse) or a size distribution (polydisperse).
+
+```python
+import mieshah as ms
+import matplotlib.pyplot as plt
+
+# ----------------------------------------------------
+# A. Polydisperse Size Distribution Example
+# ----------------------------------------------------
+# Reff: size range [0.1, 1.0] microns
+# wl: 0.5 microns (wavelength)
+# m: (1.5, 0.01) (complex refractive index: n = 1.5, k = 0.01)
+# f: size distribution function string
+# incr: size increment for integration
+mymie = ms.miescatter(
+    reff=[0.1, 1.0], 
+    wl=0.5, 
+    m=(1.5, 0.01), 
+    f="x**-2", 
+    incr=0.01,
+    theta=[0, 180]  # Computes from 0 to 180 degrees in 1-degree steps
+)
+
+print("--- Bulk Properties ---")
+print(f"Effective Size Parameter (X): {mymie.X}")
+print(f"Effective Radius (r_eff):     {mymie.r_eff}")
+print(f"Extinction Efficiency (QEXT): {mymie.QEXT}")
+print(f"Scattering Efficiency (QSCA): {mymie.QSCA}")
+print(f"Absorption Efficiency (QABS): {mymie.QABS}")
+print(f"Single Scattering Albedo:     {mymie.ALBED}")
+print(f"Asymmetry Parameter (g):      {mymie.ASYM}")
+
+# Plot degree of linear polarization
+plt.figure(figsize=(8, 4))
+plt.plot(mymie.theta, mymie.Polar, label="Polarization", color="crimson")
+plt.xlabel("Scattering Angle (degrees)")
+plt.ylabel("Degree of Linear Polarization")
+plt.title("Linear Polarization vs. Scattering Angle")
+plt.grid(True)
+plt.legend()
+plt.show()
+
+# ----------------------------------------------------
+# B. Monodisperse (Single Particle) Example
+# ----------------------------------------------------
+# For single particles, size distribution 'f' and increment 'incr' are omitted
+mono_mie = ms.miescatter(
+    reff=0.5, 
+    wl=0.6328, 
+    m=(1.5, 0.0), 
+    theta=[10, 80, 50]  # Linspace mode: 50 points from 10 to 80 degrees
+)
+print(f"Monodisperse Albedo: {mono_mie.ALBED}")
+```
+
+---
+
+### 2. Spectral Analysis over Wavelengths/Wavenumbers (`specfile` & `spectrum`)
+Read a spectral data file of complex refractive indices, run batch Mie scattering, save the outputs to CSV logs, and plot the spectrum.
+
+#### Expected Data File Format:
+Data files should have tabular columns separated by whitespace or a specific delimiter:
+* **Wavelength Mode:** A column with wavelength data, plus real index ($n$) and imaginary index ($k$) columns.
+* **Wavenumber Mode:** A column with wavenumber data (in $\text{cm}^{-1}$), plus $n$ and $k$ columns (with `wlscale` applied to convert wavenumber to microns, e.g. `wlscale=10000`).
+
+```python
+import mieshah as ms
+import matplotlib.pyplot as plt
+
+# 1. Parse a refractive index spectrum file (Wavelength-based)
+# Columns: 0 -> Wavelength (microns), 1 -> n, 2 -> k
+data_wl = ms.specfile("nk_Fe2O3.txt", sep=" ", wlcol=0, ncol=1, kcol=2)
+
+# 2. Parse a refractive index spectrum file (Wavenumber-based)
+# Columns: 0 -> Wavenumber (cm^-1), 1 -> n, 3 -> k
+# wlscale=10000 translates wavenumber (cm^-1) to wavelength in microns
+data_wn = ms.specfile("nk_ice_H2O.txt", sep=" ", wncol=0, wlscale=10000, ncol=1, kcol=3)
+
+# 3. Create spectrum calculation configurations
+# Computing scattering at a single angle (e.g. theta=180 for backscattering)
+spec_fe = ms.spectrum(data_wl, reff=[1, 10], f="r**-2", theta=180, verbose=False)
+spec_ice = ms.spectrum(data_wn, reff=[1, 10], f="r**-2", theta=180, verbose=False)
+
+# 4. Save results to output CSV files
+# Writes bulk efficiencies to file1 and angular quantities to file2
+spec_fe.save("Spec_mie1_Fe2O3.csv", "Spec_mie2_Fe2O3.csv")
+spec_ice.save("Spec_mie1_ice.csv", "Spec_mie2_ice.csv")
+
+# 5. Visualize and compare the spectral parameters
+plt.figure(figsize=(10, 5))
+plt.semilogy(spec_fe.wl, spec_fe.QEXT, label="Hematite (QEXT)", color="darkred")
+plt.semilogy(spec_fe.wl, spec_fe.QSCA, label="Hematite (QSCA)", color="red", linestyle="--")
+plt.semilogy(spec_ice.wl, spec_ice.QEXT, label="Water Ice (QEXT)", color="navy")
+plt.semilogy(spec_ice.wl, spec_ice.QSCA, label="Water Ice (QSCA)", color="blue", linestyle="--")
+
+plt.xlabel("Wavelength ($\mu$m)")
+plt.ylabel("Mie Efficiencies")
+plt.title("Extinction & Scattering Spectra Comparison")
+plt.legend()
+plt.grid(True, which="both", ls="-", alpha=0.5)
+plt.show()
+```
+
+---
+
+## Output Parameters & Attributes
+
+The following tables list the comprehensive attributes and outputs calculated by `mieshah` for both single wavelength objects (`miescatter`) and spectral analysis objects (`spectrum`).
+
+### 1. `miescatter` Attributes
+These attributes are populated on the `miescatter` object after calling `ms.miescatter(...)`.
+
+| Attribute | Type | Description |
+| :--- | :--- | :--- |
+| `X` | `float` | Size parameter ($x = 2 \pi a / \lambda$). In polydisperse mode, this represents the average size parameter of the size distribution. |
+| `r_eff` | `float` | Effective radius of the particle size distribution (Hansen & Travis 1974). In monodisperse mode, this equals the input particle radius. |
+| `QEXT` | `float` | Extinction efficiency ($Q_{\text{ext}}$). |
+| `QSCA` | `float` | Scattering efficiency ($Q_{\text{sca}}$). |
+| `QABS` | `float` | Absorption efficiency ($Q_{\text{abs}} = Q_{\text{ext}} - Q_{\text{sca}}$). |
+| `ALBED` | `float` | Single-scattering albedo ($\omega = Q_{\text{sca}} / Q_{\text{ext}}$). For polydisperse mode, computed physically as $\langle Q_{\text{sca}} \rangle / \langle Q_{\text{ext}} \rangle$. |
+| `ASYM` | `float` | Asymmetry parameter ($g = \langle \cos\theta \rangle$). |
+| `QPR` | `float` | Radiation pressure efficiency ($Q_{\text{pr}} = Q_{\text{ext}} - g \cdot Q_{\text{sca}}$). |
+| `QBAK` | `float` | Backscattering efficiency ($Q_{\text{bak}}$). |
+| `RHO` | `float` | Phase shift parameter ($\rho = 2x(m-1)$). |
+| `SCA` | `float` | Integrated scattering cross-section value. |
+| `theta` | `list` | List of scattering angles in degrees for which angular metrics were calculated. |
+| `I_perp` | `list` | Scattering intensity perpendicular to the scattering plane, $I_{\perp}(\theta)$, corresponding to each angle in `theta`. |
+| `I_parl` | `list` | Scattering intensity parallel to the scattering plane, $I_{\parallel}(\theta)$, corresponding to each angle in `theta`. |
+| `Polar` | `list` | Degree of linear polarization, $P(\theta) = (I_{\perp} - I_{\parallel}) / (I_{\perp} + I_{\parallel})$, corresponding to each angle in `theta`. |
+| `p_theta` | `list` | Scattering phase function values corresponding to each angle in `theta`. |
+
+### 2. `spectrum` Attributes
+These attributes are populated on the `spectrum` object after initialization. Each attribute is a list containing the computed value at each wavelength in the spectrum.
+
+| Attribute | Type | Description |
+| :--- | :--- | :--- |
+| `wl` | `list` of `float` | Scaled wavelengths of the spectrum in microns. |
+| `X` | `list` of `float` | Size parameters corresponding to each wavelength. |
+| `r_eff` | `list` of `float` | Effective radius of the particle size distribution corresponding to each wavelength. |
+| `QEXT` | `list` of `float` | Extinction efficiencies corresponding to each wavelength. |
+| `QSCA` | `list` of `float` | Scattering efficiencies corresponding to each wavelength. |
+| `QABS` | `list` of `float` | Absorption efficiencies corresponding to each wavelength. |
+| `ALBED` | `list` of `float` | Single-scattering albedo values corresponding to each wavelength. |
+| `ASYM` | `list` of `float` | Asymmetry parameters corresponding to each wavelength. |
+| `QPR` | `list` of `float` | Radiation pressure efficiencies corresponding to each wavelength. |
+| `QBAK` | `list` of `float` | Backscattering efficiencies corresponding to each wavelength. |
+| `SCA` | `list` of `float` | Integrated scattering values corresponding to each wavelength. |
+| `I_perp` | `list` of `float` | Scattering intensities perpendicular to the scattering plane at the configured single `theta` angle. |
+| `I_parl` | `list` of `float` | Scattering intensities parallel to the scattering plane at the configured single `theta` angle. |
+| `Polar` | `list` of `float` | Degrees of linear polarization at the configured single `theta` angle. |
+| `p_theta` | `list` of `float` | Scattering phase function values at the configured single `theta` angle. |
+
+### 3. Logged CSV Files Layout
+When running calculations, CSV files are automatically exported for post-processing and logging:
+* **Single Wavelength logs (`mie1.csv` and `mie2.csv`):**
+  * `mie1.csv`: Logs bulk averaged efficiency factors and parameters at the reference angle.
+  * `mie2.csv`: Logs angular values (`theta`, `I_perp`, `I_parl`, `Polar`, `p_theta`) for all calculated scattering angles.
+* **Spectrum logs (`Spec_mie1.csv` and `Spec_mie2.csv`):**
+  * `Spec_mie1.csv`: Logs spectral progress of bulk parameters (`X`, `WL`, `QSCA`, `QEXT`, `QABS`, `ALBED`, `ASYM`, `QPR`, `QBAK`, `SCA`, `r_eff`).
+  * `Spec_mie2.csv`: Logs spectral progress at the chosen `theta` (`wl`, `theta`, `I_perp`, `I_parl`, `Polar`, `p_theta`).
+
+---
+
+## Interactive Help System
+Access quick reference help from your active Python session:
+```python
+import mieshah as ms
+
+# Show all help docs
+ms.help()
+
+# Or show help for specific components
+ms.Help.show_miescatter()
+ms.Help.show_specfile()
+ms.Help.show_spectrum()
+```
+
+---
+
+## Key Improvements & New Features (v1.1.1 vs. v0.0.5)
+
+`mieshah` version `1.1.1` introduces a major set of upgrades over the older `v0.0.5` release, significantly boosting performance, physics correctness, API flexibility, and stability:
+
+### 1. $N \times$ Computational Speedup via Parameter Precalculation
+* **v0.0.5:** Single-particle parameters (Mie coefficients $a_n, b_n$ and efficiencies) were re-calculated inside the scattering angle loop for every single angle $\theta$. For $N$ angles and $M$ size bins, recurrence relations were evaluated $N \times M$ times.
+* **v1.1.1:** Single-particle parameters for all size bins are precalculated and cached exactly **once** before entering the angular loop. The angular loop now only performs a fast summation over Legendre polynomials.
+* **Impact:** For a full sweep of $181$ angles ($0^\circ$ to $180^\circ$), this results in an approximate **$180\times$ speedup** for polydisperse calculations.
+
+### 2. Physically Correct Weighting for Polydisperse Averages
+* **Albedo ($\text{ALBED}$):** Corrected to be the ratio of the average scattering efficiency to the average extinction efficiency ($\langle Q_{\text{sca}} \rangle / \langle Q_{\text{ext}} \rangle$) rather than a simple arithmetic average of individual albedos.
+  $$\text{Albedo}_{\text{avg}} = \frac{\sum Q_{\text{sca}}(r) f(r) \Delta r}{\sum Q_{\text{ext}}(r) f(r) \Delta r}$$
+* **Phase Function ($P(\theta)$) and Intensities ($I_{\parallel}, I_{\perp}$):** Corrected to be weighted by the scattering cross-section ($C_{\text{sca}}(r) \propto Q_{\text{sca}}(r) \cdot x(r)^2$) rather than a flat arithmetic average over the frequency distribution $f(r)\Delta r$. This ensures that larger or more strongly scattering particles correctly dominate the collective phase function:
+  $$P_{\text{avg}}(\theta) = \frac{\sum P(\theta, r) C_{\text{sca}}(r) f(r) \Delta r}{\sum C_{\text{sca}}(r) f(r) \Delta r}$$
+
+### 3. Full Spectral Suite (`specfile` and `spectrum`)
+* **v0.0.5:** Only supported single-wavelength calculations.
+* **v1.1.1:** Adds two new classes `specfile` (for parsing and scaling complex refractive index files vs wavelength/wavenumber) and `spectrum` (for configuring, running, and saving spectral batch calculations).
+
+### 4. Advanced `theta` Argument Syntax
+* **v0.0.5:** Limited or no custom angular range customization.
+* **v1.1.1:** Supports three modes for `theta` in `miescatter`:
+  1. Single value: `theta=30` (computes at a single angle).
+  2. Range list: `theta=[10, 45]` (computes in 1-degree steps from $10^\circ$ to $45^\circ$, inclusive).
+  3. Linspace list: `theta=[10, 30, 20]` (computes at 20 linearly spaced points from $10^\circ$ to $30^\circ$, allowing fractional degrees).
+
+### 5. Effective Radius Parameter (`r_eff`)
+* Calculates and stores the effective radius (`r_eff`) of the size distribution as an attribute and logs it to output tables:
+  $$r_{\text{eff}} = \frac{\int r^3 f(r) dr}{\int r^2 f(r) dr}$$
+
+### 6. Modernized Numerical Core
+* Replaced fixed array sizes with native, dynamic NumPy complex arrays (`complex128`).
+* Implemented Wiscombe's dynamic termination order ($n_{\text{stop}} = x + 4x^{1/3} + 2$) to optimize speed and guarantee numerical stability.
+
+---
+
+## Citation & DOI
+If you use this package in your research, please cite it as follows:
+
+> Deb, D. (2026). mieshah: Calculate light scattering properties/parameters of spheres by using Mie theory (Version 1.1.1) [Software]. Zenodo. https://doi.org/10.5281/zenodo.15380219

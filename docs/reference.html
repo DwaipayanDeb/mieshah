@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Reference - mieshah</title>
+  <meta name="description" content="Detailed documentation of the classes, attributes, outputs, CSV log formats, and interactive help in mieshah.">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  
+  <!-- MathJax Configuration for Proper Equation Rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-container">
+        <button class="btn-icon hamburger-btn" id="mobile-menu-toggle" aria-label="Toggle Navigation">
+          <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+        <span class="logo-text">mieshah</span>
+        <span class="version-badge">v1.1.1</span>
+      </div>
+      <div class="header-controls">
+        <a href="https://doi.org/10.5281/zenodo.15380219" target="_blank" rel="noopener noreferrer" style="display: flex;">
+          <img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.15380219-blue.svg" alt="DOI Badge" style="height: 20px;">
+        </a>
+        <button class="btn-icon" id="theme-toggle" aria-label="Toggle Theme">
+          <svg class="moon-icon" viewBox="0 0 24 24"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.2.5-.1 1.1-.6 1.3-3.4 1.5-5.7 4.9-5.7 8.8 0 4.4 3.6 8 8 8 3.9 0 7.3-2.3 8.8-5.7.2-.5.8-.8 1.3-.6.5.2.8.8.7 1.3-.9 4.7-5 8.2-9.8 8.3z"/></svg>
+          <svg class="sun-icon" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="main-wrapper">
+      
+      <!-- Sidebar navigation -->
+      <aside class="app-sidebar">
+        <div class="nav-title">Documentation</div>
+        <nav>
+          <ul class="nav-menu">
+            <li class="nav-item">
+              <a href="index.html" class="nav-link">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Overview
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="usage.html" class="nav-link">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                Usage Guide
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="reference.html" class="nav-link">
+                <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+                API Reference
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="changelog.html" class="nav-link">
+                <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+                Changelog
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="citation.html" class="nav-link">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                Citation & License
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Content Pane -->
+      <main class="content-pane">
+        <div class="content-container">
+          
+          <h1 id="reference-title">API Reference</h1>
+          <p>
+            Detailed listings of the classes, calculated attributes, logged outputs, and interactive help utilities provided by <code>mieshah</code>.
+          </p>
+
+          <hr style="margin: 1.5rem 0;">
+
+          <h2 id="miescatter-attributes">1. <code>miescatter</code> Attributes</h2>
+          <p>
+            These attributes are populated on the <code>miescatter</code> object after initiating a calculation via <code>ms.miescatter(...)</code>.
+          </p>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>X</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Size parameter ($x = 2 \pi a / \lambda$). In polydisperse mode, this represents the average size parameter of the size distribution.</td>
+                </tr>
+                <tr>
+                  <td><code>r_eff</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Effective radius of the particle size distribution. In monodisperse mode, this equals the input particle radius.</td>
+                </tr>
+                <tr>
+                  <td><code>QEXT</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Extinction efficiency ($Q_{\text{ext}}$).</td>
+                </tr>
+                <tr>
+                  <td><code>QSCA</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Scattering efficiency ($Q_{\text{sca}}$).</td>
+                </tr>
+                <tr>
+                  <td><code>QABS</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Absorption efficiency ($Q_{\text{abs}} = Q_{\text{ext}} - Q_{\text{sca}}$).</td>
+                </tr>
+                <tr>
+                  <td><code>ALBED</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Single-scattering albedo ($\omega = Q_{\text{sca}} / Q_{\text{ext}}$). For polydisperse mode, computed physically as $\langle Q_{\text{sca}} \rangle / \langle Q_{\text{ext}} \rangle$.</td>
+                </tr>
+                <tr>
+                  <td><code>ASYM</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Asymmetry parameter ($g = \langle \cos\theta \rangle$).</td>
+                </tr>
+                <tr>
+                  <td><code>QPR</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Radiation pressure efficiency ($Q_{\text{pr}} = Q_{\text{ext}} - g \cdot Q_{\text{sca}}$).</td>
+                </tr>
+                <tr>
+                  <td><code>QBAK</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Backscattering efficiency ($Q_{\text{bak}}$).</td>
+                </tr>
+                <tr>
+                  <td><code>RHO</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Phase shift parameter ($\rho = 2x(m-1)$).</td>
+                </tr>
+                <tr>
+                  <td><code>SCA</code></td>
+                  <td><span class="badge badge-float">float</span></td>
+                  <td>Integrated scattering cross-section value.</td>
+                </tr>
+                <tr>
+                  <td><code>theta</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>List of scattering angles in degrees for which angular metrics were calculated.</td>
+                </tr>
+                <tr>
+                  <td><code>I_perp</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Scattering intensity perpendicular to the scattering plane, $I_{\perp}(\theta)$, corresponding to each angle in <code>theta</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>I_parl</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Scattering intensity parallel to the scattering plane, $I_{\parallel}(\theta)$, corresponding to each angle in <code>theta</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>Polar</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Degree of linear polarization, $P(\theta) = (I_{\perp} - I_{\parallel}) / (I_{\perp} + I_{\parallel})$, corresponding to each angle in <code>theta</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>p_theta</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Scattering phase function values corresponding to each angle in <code>theta</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <hr>
+
+          <h2 id="spectrum-attributes">2. <code>spectrum</code> Attributes</h2>
+          <p>
+            These attributes are populated on the <code>spectrum</code> object after initialization. Each attribute contains a list representing values computed at each individual wavelength step in the spectrum.
+          </p>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>wl</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Scaled wavelengths of the spectrum in microns.</td>
+                </tr>
+                <tr>
+                  <td><code>X</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Size parameters corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>r_eff</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Effective radius of the particle size distribution corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>QEXT</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Extinction efficiencies corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>QSCA</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Scattering efficiencies corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>QABS</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Absorption efficiencies corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>ALBED</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Single-scattering albedo values corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>ASYM</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Asymmetry parameters corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>QPR</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Radiation pressure efficiencies corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>QBAK</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Backscattering efficiencies corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>SCA</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Integrated scattering values corresponding to each wavelength.</td>
+                </tr>
+                <tr>
+                  <td><code>I_perp</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Scattering intensities perpendicular to the scattering plane at the configured single <code>theta</code> angle.</td>
+                </tr>
+                <tr>
+                  <td><code>I_parl</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Scattering intensities parallel to the scattering plane at the configured single <code>theta</code> angle.</td>
+                </tr>
+                <tr>
+                  <td><code>Polar</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Degrees of linear polarization at the configured single <code>theta</code> angle.</td>
+                </tr>
+                <tr>
+                  <td><code>p_theta</code></td>
+                  <td><span class="badge badge-list">list</span></td>
+                  <td>Scattering phase function values at the configured single <code>theta</code> angle.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <hr>
+
+          <h2 id="logged-csv">3. Logged CSV Files Layout</h2>
+          <p>
+            When running calculations, CSV logs are exported for post-processing and logging:
+          </p>
+          <ul>
+            <li>
+              <strong>Single Wavelength logs (<code>mie1.csv</code> and <code>mie2.csv</code>):</strong>
+              <ul>
+                <li><code>mie1.csv</code>: Logs bulk averaged efficiency factors and parameters at the reference angle.</li>
+                <li><code>mie2.csv</code>: Logs angular values (<code>theta</code>, <code>I_perp</code>, <code>I_parl</code>, <code>Polar</code>, <code>p_theta</code>) for all calculated scattering angles.</li>
+              </ul>
+            </li>
+            <li style="margin-top: 0.5rem;">
+              <strong>Spectrum logs (<code>Spec_mie1.csv</code> and <code>Spec_mie2.csv</code>):</strong>
+              <ul>
+                <li><code>Spec_mie1.csv</code>: Logs spectral progress of bulk parameters (<code>X</code>, <code>WL</code>, <code>QSCA</code>, <code>QEXT</code>, <code>QABS</code>, <code>ALBED</code>, <code>ASYM</code>, <code>QPR</code>, <code>QBAK</code>, <code>SCA</code>, <code>r_eff</code>).</li>
+                <li><code>Spec_mie2.csv</code>: Logs spectral progress at the chosen <code>theta</code> (<code>wl</code>, <code>theta</code>, <code>I_perp</code>, <code>I_parl</code>, <code>Polar</code>, <code>p_theta</code>).</li>
+              </ul>
+            </li>
+          </ul>
+
+          <hr>
+
+          <h2 id="help-system">4. Interactive Help System</h2>
+          <p>
+            Access quick reference help from your active Python terminal session using the built-in <code>help</code> features:
+          </p>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span>Python Console</span>
+              <button class="code-copy-btn">
+                <svg viewBox="0 0 24 24" style="width:14px; height:14px; fill:currentColor; vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span class="btn-label">Copy</span>
+              </button>
+            </div>
+            <pre><code class="language-python">import mieshah as ms
+
+# Show all help documentation
+ms.help()
+
+# Or show help for specific components and parameter meanings
+ms.Help.show_miescatter()
+ms.Help.show_specfile()
+ms.Help.show_spectrum()</code></pre>
+          </div>
+
+          <div style="margin-top: 3rem; display: flex; justify-content: space-between;">
+            <a href="usage.html" class="nav-link" style="padding: 0.6rem 1.2rem; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+              <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+              Back: Usage Guide
+            </a>
+            <a href="changelog.html" class="nav-link active" style="padding: 0.6rem 1.2rem; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+              Next: Changelog
+              <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </a>
+          </div>
+
+          <!-- Footer -->
+          <footer class="app-footer">
+            <p>&copy; 2026 Dwaipayan Deb. Built for the <code>mieshah</code> project.</p>
+          </footer>
+          
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Prism.js and Custom Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+include README.md
+include LICENSE
+exclude pymieshah_old.py
+exclude readme.txt
+exclude mie1.out
+exclude mie2.csv
+recursive-exclude TEST *
+recursive-exclude __pycache__ *
+global-exclude *.pyc
+global-exclude *.pyo

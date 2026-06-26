@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mieshah"
+version = "1.1.1"
+authors = [
+  { name="Dwaipayan Deb" }
+]
+description = "A Python package for calculating light scattering properties/parameters of spheres using Mie theory."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "numpy",
+    "sympy",
+    "dimpy",
+    "tablefile",
+]
+
+[tool.setuptools]
+packages = ["mieshah"]
+
+[tool.setuptools.package-dir]
+"mieshah" = "."
