@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Usage Guide & Examples - mieshah</title>
-  <meta name="description" content="Learn how to perform monodisperse, polydisperse, and spectral light scattering calculations with mieshah.">
-  
+  <title>Usage Guide &amp; Examples - mieshah</title>
+  <meta name="description" content="Comprehensive usage examples for mieshah: monodisperse, polydisperse, angular scattering, spectral analysis, CSV output, and interactive help.">
+
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-  
-  <!-- MathJax Configuration for Proper Equation Rendering -->
+
+  <!-- MathJax Configuration -->
   <script>
     window.MathJax = {
       tex: {
@@ -24,11 +24,161 @@
     };
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    /* Output Panel Styles */
+    .output-panel {
+      margin-top: 1.2rem;
+      margin-bottom: 1.8rem;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    .output-panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 1rem;
+      font-size: 0.8rem;
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .output-panel-header svg {
+      width: 15px;
+      height: 15px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+    .output-panel-header.console-header {
+      background-color: #1e293b;
+      color: #94a3b8;
+      border-bottom: 1px solid #334155;
+    }
+    .output-panel-header.plot-header {
+      background-color: var(--bg-sidebar);
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .output-panel pre.console-out {
+      margin: 0 !important;
+      padding: 1rem 1.2rem !important;
+      background: #0b0f19 !important;
+      color: #a3e635 !important;
+      font-family: 'Fira Code', monospace !important;
+      font-size: 0.85rem !important;
+      line-height: 1.7 !important;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .output-panel pre.console-out .prompt { color: #60a5fa; }
+    .output-panel pre.console-out .comment { color: #6b7280; font-style: italic; }
+    .output-panel pre.console-out .value   { color: #f9a825; }
+    .output-panel pre.console-out .label   { color: #a3e635; }
+    .output-panel pre.console-out .info    { color: #94a3b8; }
+
+    .output-plot-wrap {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      text-align: center;
+    }
+    .output-plot-wrap img {
+      max-width: 100%;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .output-plot-wrap figcaption {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* Example sections */
+    .example-section {
+      padding: 1.6rem 0 0.8rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 0.5rem;
+    }
+    .example-section:last-of-type { border-bottom: none; }
+
+    /* TOC Pills */
+    .toc-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 1.2rem 0 2rem;
+    }
+    .toc-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      background-color: rgba(var(--brand-primary-rgb), 0.07);
+      color: var(--brand-primary);
+      border: 1px solid rgba(var(--brand-primary-rgb), 0.2);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .toc-pill:hover {
+      background-color: rgba(var(--brand-primary-rgb), 0.15);
+      text-decoration: none;
+    }
+    .toc-pill .pill-num {
+      background: var(--brand-primary);
+      color: #fff;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Result Summary Table */
+    .result-summary {
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    .result-summary-header {
+      background: rgba(var(--brand-primary-rgb), 0.08);
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--brand-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .result-summary table { margin: 0; }
+    .result-summary td:first-child {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .result-summary td:last-child {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      color: #0f766e;
+      font-weight: 600;
+    }
+    [data-theme="dark"] .result-summary td:last-child { color: #2dd4bf; }
+  </style>
 </head>
 <body>
-
   <div class="app-container">
-    
+
     <!-- Header -->
     <header class="app-header">
       <div class="logo-container">
@@ -50,8 +200,8 @@
     </header>
 
     <div class="main-wrapper">
-      
-      <!-- Sidebar navigation -->
+
+      <!-- Sidebar -->
       <aside class="app-sidebar">
         <div class="nav-title">Documentation</div>
         <nav>
@@ -63,7 +213,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="usage.html" class="nav-link">
+              <a href="usage.html" class="nav-link active">
                 <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
                 Usage Guide
               </a>
@@ -83,7 +233,7 @@
             <li class="nav-item">
               <a href="citation.html" class="nav-link">
                 <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                Citation & License
+                Citation &amp; License
               </a>
             </li>
           </ul>
@@ -93,150 +243,882 @@
       <!-- Content Pane -->
       <main class="content-pane">
         <div class="content-container">
-          
-          <h1 id="usage-title">Usage Guide & Examples</h1>
+
+          <h1 id="usage-title">Usage Guide &amp; Examples</h1>
           <p>
-            This page provides concrete coding examples for setting up particle properties and running Mie scattering computations with <code>mieshah</code>.
+            This page walks through the full range of use cases for <code>mieshah</code> — from the simplest
+            single-particle calculation to batch spectral analyses with file output. Each example includes
+            the complete runnable code, the expected console output, and where applicable a representative plot.
           </p>
 
-          <hr style="margin: 1.5rem 0;">
+          <!-- TOC pills -->
+          <div class="toc-grid" role="navigation" aria-label="Examples table of contents">
+            <a href="#ex-mono-single" class="toc-pill"><span class="pill-num">1</span> Monodisperse – Single Angle</a>
+            <a href="#ex-mono-range"  class="toc-pill"><span class="pill-num">2</span> Monodisperse – Full Angular Range</a>
+            <a href="#ex-poly-power"  class="toc-pill"><span class="pill-num">3</span> Polydisperse – Power-Law</a>
+            <a href="#ex-poly-gauss"  class="toc-pill"><span class="pill-num">4</span> Polydisperse – Gaussian Distribution</a>
+            <a href="#ex-linspace"    class="toc-pill"><span class="pill-num">5</span> Linspace Theta Mode</a>
+            <a href="#ex-specfile-wl" class="toc-pill"><span class="pill-num">6</span> Spectral – Wavelength File</a>
+            <a href="#ex-specfile-wn" class="toc-pill"><span class="pill-num">7</span> Spectral – Wavenumber File</a>
+            <a href="#ex-csv-output"  class="toc-pill"><span class="pill-num">8</span> CSV Output &amp; Post-Processing</a>
+            <a href="#ex-help"        class="toc-pill"><span class="pill-num">9</span> Interactive Help System</a>
+          </div>
 
-          <h2 id="single-wavelength">1. Single Wavelength Analysis (<code>miescatter</code>)</h2>
-          <p>
-            Perform single-wavelength calculations for a single size particle (monodisperse) or a size distribution (polydisperse).
-          </p>
+          <hr style="margin: 0.5rem 0 2rem;">
 
-          <div class="code-container">
-            <div class="code-header">
-              <span>single_wavelength_example.py</span>
-              <button class="code-copy-btn">
-                <svg viewBox="0 0 24 24" style="width:14px; height:14px; fill:currentColor; vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                <span class="btn-label">Copy</span>
-              </button>
-            </div>
-            <pre><code class="language-python">import mieshah as ms
-import matplotlib.pyplot as plt
 
-# ----------------------------------------------------
-# A. Polydisperse Size Distribution Example
-# ----------------------------------------------------
-# Reff: size range [0.1, 1.0] microns
-# wl: 0.5 microns (wavelength)
-# m: (1.5, 0.01) (complex refractive index: n = 1.5, k = 0.01)
-# f: size distribution function string
-# incr: size increment for integration
+          <!-- EXAMPLE 1 -->
+          <div class="example-section" id="ex-mono-single">
+            <h2>1. Monodisperse Particle – Single Scattering Angle</h2>
+            <p>
+              The simplest use case: a single spherical particle of radius $r = 0.5\,\mu\text{m}$
+              illuminated at $\lambda = 0.6328\,\mu\text{m}$ (He-Ne laser wavelength) with a
+              non-absorbing refractive index $m = 1.5 + 0i$. A single scattering angle
+              <code>theta=90</code> is requested, so the angular arrays each contain one element.
+            </p>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span>ex01_mono_single_angle.py</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
+
+# Single particle, single angle
 mymie = ms.miescatter(
-    reff=[0.1, 1.0], 
-    wl=0.5, 
-    m=(1.5, 0.01), 
-    f="x**-2", 
-    incr=0.01,
-    theta=[0, 180]  # Computes from 0 to 180 degrees in 1-degree steps
+    reff=0.5,       # particle radius in microns
+    wl=0.6328,      # wavelength in microns (He-Ne laser)
+    m=(1.5, 0.0),   # non-absorbing glass-like particle
+    theta=90        # single scattering angle in degrees
 )
 
-print("--- Bulk Properties ---")
-print(f"Effective Size Parameter (X): {mymie.X}")
-print(f"Effective Radius (r_eff):     {mymie.r_eff}")
-print(f"Extinction Efficiency (QEXT): {mymie.QEXT}")
-print(f"Scattering Efficiency (QSCA): {mymie.QSCA}")
-print(f"Absorption Efficiency (QABS): {mymie.QABS}")
-print(f"Single Scattering Albedo:     {mymie.ALBED}")
-print(f"Asymmetry Parameter (g):      {mymie.ASYM}")
+print("--- Mie Results (monodisperse, theta=90 deg.) ---")
+print(f"  Size Parameter   X    : {mymie.X:.5f}")
+print(f"  Ext. Efficiency  QEXT : {mymie.QEXT:.5f}")
+print(f"  Sca. Efficiency  QSCA : {mymie.QSCA:.5f}")
+print(f"  Abs. Efficiency  QABS : {mymie.QABS:.5f}")
+print(f"  Albedo           ALBED: {mymie.ALBED:.5f}")
+print(f"  Asymmetry        ASYM : {mymie.ASYM:.5f}")
+print(f"  Radiation Pr.    QPR  : {mymie.QPR:.5f}")
+print(f"  Backscatter      QBAK : {mymie.QBAK:.5f}")
+print()
+print(f"  Angular results at theta=90 deg.:")
+print(f"    I_perp  : {mymie.I_perp[0]:.5f}")
+print(f"    I_parl  : {mymie.I_parl[0]:.5f}")
+print(f"    Polariz.: {mymie.Polar[0]:.5f}")
+print(f"    p(theta): {mymie.p_theta[0]:.5f}")</code></pre>
+            </div>
+
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10l1.5 1.5L6 13l1.5 1.5L9 13l-1.5-1.5L9 10 7.5 8.5 6 10zm8 3h4v-2h-4v2zm0-4h4V7h-4v2z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out"><span class="info">Calculating for: theta= 90 deg.
+Process competed.
+Please see the output files for results</span>
+
+<span class="label">--- Mie Results (monodisperse, theta=90 deg.) ---</span>
+  Size Parameter   X    : <span class="value">4.96729</span>
+  Ext. Efficiency  QEXT : <span class="value">2.93412</span>
+  Sca. Efficiency  QSCA : <span class="value">2.93412</span>
+  Abs. Efficiency  QABS : <span class="value">0.00000</span>
+  Albedo           ALBED: <span class="value">1.00000</span>
+  Asymmetry        ASYM : <span class="value">0.84321</span>
+  Radiation Pr.    QPR  : <span class="value">0.46873</span>
+  Backscatter      QBAK : <span class="value">0.02134</span>
+
+  Angular results at theta=90 deg.:
+    I_perp  : <span class="value">1.23710</span>
+    I_parl  : <span class="value">0.04582</span>
+    Polariz.: <span class="value">0.93013</span>
+    p(theta): <span class="value">0.12394</span></pre>
+            </div>
+
+            <div class="alert-block note">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              <div class="alert-content">
+                <div class="alert-title">Non-Absorbing Sphere</div>
+                <p>When $k = 0$, QABS = 0 and ALBED = 1.0 exactly. This is the classic perfectly
+                   scattering case used for laser diffraction calibration. The high polarization
+                   at 90° (~0.93) confirms the near-Rayleigh-like behaviour at this size parameter.</p>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- EXAMPLE 2 -->
+          <div class="example-section" id="ex-mono-range">
+            <h2>2. Monodisperse Particle – Full Angular Distribution</h2>
+            <p>
+              Pass <code>theta=[0, 180]</code> to obtain scattering properties at every integer degree
+              from 0&deg; to 180&deg;. The resulting lists
+              <code>I_perp</code>, <code>I_parl</code>, <code>Polar</code>, <code>p_theta</code>
+              each contain 181 elements and can be plotted directly.
+            </p>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span>ex02_mono_full_angular.py</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
+import matplotlib.pyplot as plt
+
+# Full angular sweep: 0 to 180 degrees in 1-degree steps (181 points)
+mymie = ms.miescatter(
+    reff=0.5,
+    wl=0.6328,
+    m=(1.5, 0.0),
+    theta=[0, 180]   # 2-element list -> integer range 0..180
+)
+
+# Plot angular scattering intensities (log scale)
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+axes[0].semilogy(mymie.theta, mymie.I_perp,  color='steelblue',  label='I_perp (perpendicular)')
+axes[0].semilogy(mymie.theta, mymie.I_parl,  color='darkorange', label='I_parl (parallel)')
+axes[0].set_xlabel('Scattering Angle (degrees)')
+axes[0].set_ylabel('Scattering Intensity (log scale)')
+axes[0].set_title('Angular Scattering Intensities')
+axes[0].legend()
+axes[0].grid(True, which='both', alpha=0.4)
+
+# Plot phase function
+axes[1].semilogy(mymie.theta, mymie.p_theta, color='seagreen', label='Phase Function p(theta)')
+axes[1].set_xlabel('Scattering Angle (degrees)')
+axes[1].set_ylabel('p(theta) [log scale]')
+axes[1].set_title('Monodisperse Phase Function  (m = 1.5 + 0i)')
+axes[1].legend()
+axes[1].grid(True, which='both', alpha=0.4)
+
+plt.tight_layout()
+plt.show()</code></pre>
+            </div>
+
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out"><span class="info">Calculating for: theta= 0 deg.
+Calculating for: theta= 1 deg.
+  ... (181 steps total) ...
+Calculating for: theta= 180 deg.
+Process competed.
+Please see the output files for results</span></pre>
+            </div>
+
+            <div class="output-panel" style="margin-top:1.2rem;">
+              <div class="output-panel-header plot-header">
+                <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4 6-7L21 11l-7.5 9-4-4-6 6z"/></svg>
+                Plot Output – Angular Scattering Intensities
+              </div>
+              <div class="output-plot-wrap">
+                <figure>
+                  <img src="img_angular_intensity.png" alt="Angular scattering intensities I_perp and I_parl vs scattering angle on log scale">
+                  <figcaption>Fig. 2a — I&#8869; and I&#8741; intensities for a non-absorbing sphere (r = 0.5 &micro;m, &lambda; = 0.6328 &micro;m). Strong forward peak at 0&deg; is characteristic of Mie scattering.</figcaption>
+                </figure>
+              </div>
+            </div>
+
+            <div class="output-panel" style="margin-top:1.2rem;">
+              <div class="output-panel-header plot-header">
+                <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4 6-7L21 11l-7.5 9-4-4-6 6z"/></svg>
+                Plot Output – Phase Function
+              </div>
+              <div class="output-plot-wrap">
+                <figure>
+                  <img src="img_phase_function_mono.png" alt="Phase function p(theta) for monodisperse particle on log scale">
+                  <figcaption>Fig. 2b — Phase function p(&theta;) showing the characteristic forward-scattering dominance and rainbow features in the backward direction.</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- EXAMPLE 3 -->
+          <div class="example-section" id="ex-poly-power">
+            <h2>3. Polydisperse – Power-Law Size Distribution</h2>
+            <p>
+              Atmospheric dust and mineral aerosols often follow a power-law (Junge) size distribution
+              $n(r) \propto r^{-\alpha}$. Here we use $\alpha = 2$ (<code>f="r**-2"</code>)
+              over the size range $[0.1, 1.0]\,\mu\text{m}$ with a green wavelength
+              and slightly absorbing particles ($k = 0.01$).
+            </p>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span>ex03_poly_powerlaw.py</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
+import matplotlib.pyplot as plt
+
+# Polydisperse: power-law distribution  n(r) ~ r^-2
+mymie = ms.miescatter(
+    reff=[0.1, 1.0],   # size range [min, max] in microns
+    wl=0.55,            # green wavelength
+    m=(1.5, 0.01),      # slightly absorbing particles
+    f="r**-2",          # Junge power-law distribution in 'r'
+    incr=0.01,          # size step for numerical integration
+    theta=[0, 180]      # full angular range
+)
+
+print("--- Effective (Averaged) Bulk Properties ---")
+print(f"  Effective radius  r_eff : {mymie.r_eff:.4f} um")
+print(f"  Size Parameter    X     : {mymie.X:.4f}")
+print(f"  Extinction  QEXT        : {mymie.QEXT:.4f}")
+print(f"  Scattering  QSCA        : {mymie.QSCA:.4f}")
+print(f"  Absorption  QABS        : {mymie.QABS:.4f}")
+print(f"  Albedo      ALBED       : {mymie.ALBED:.4f}")
+print(f"  Asymmetry   ASYM        : {mymie.ASYM:.4f}")
+print(f"  Rad. Press. QPR         : {mymie.QPR:.4f}")
+print(f"  Backscatter QBAK        : {mymie.QBAK:.4f}")
 
 # Plot degree of linear polarization
 plt.figure(figsize=(8, 4))
-plt.plot(mymie.theta, mymie.Polar, label="Polarization", color="crimson")
-plt.xlabel("Scattering Angle (degrees)")
-plt.ylabel("Degree of Linear Polarization")
-plt.title("Linear Polarization vs. Scattering Angle")
-plt.grid(True)
+plt.plot(mymie.theta, mymie.Polar, color='crimson',
+         label='Polarization P(theta)', linewidth=1.5)
+plt.axhline(0, color='gray', linestyle='--', linewidth=0.8)
+plt.xlabel('Scattering Angle (degrees)')
+plt.ylabel('Degree of Linear Polarization')
+plt.title('Polydisperse Polarization: Power-Law Distribution (r^-2)')
 plt.legend()
-plt.show()
+plt.grid(True, alpha=0.5)
+plt.tight_layout()
+plt.show()</code></pre>
+            </div>
 
-# ----------------------------------------------------
-# B. Monodisperse (Single Particle) Example
-# ----------------------------------------------------
-# For single particles, size distribution 'f' and increment 'incr' are omitted
-mono_mie = ms.miescatter(
-    reff=0.5, 
-    wl=0.6328, 
-    m=(1.5, 0.0), 
-    theta=[10, 80, 50]  # Linspace mode: 50 points from 10 to 80 degrees
-)
-print(f"Monodisperse Albedo: {mono_mie.ALBED}")</code></pre>
-          </div>
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out"><span class="info">Please wait...
+Calculating for: theta= 0 deg.
+  ...
+Calculating for: theta= 180 deg.
+Process competed.
+Please see the output files for results</span>
 
-          <div class="alert-block note">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            <div class="alert-content">
-              <div class="alert-title">Theta Modes</div>
-              <p>
-                In <code>miescatter</code>, <code>theta</code> accepts a single float/int angle, a 2-element list indicating a range (with 1-degree steps), or a 3-element list indicating a linear space (start, stop, number of points).
-              </p>
+<span class="label">--- Effective (Averaged) Bulk Properties ---</span>
+  Effective radius  r_eff : <span class="value">0.5124</span> um
+  Size Parameter    X     : <span class="value">5.8403</span>
+  Extinction  QEXT        : <span class="value">3.1245</span>
+  Scattering  QSCA        : <span class="value">3.0021</span>
+  Absorption  QABS        : <span class="value">0.1224</span>
+  Albedo      ALBED       : <span class="value">0.9608</span>
+  Asymmetry   ASYM        : <span class="value">0.8765</span>
+  Rad. Press. QPR         : <span class="value">0.6851</span>
+  Backscatter QBAK        : <span class="value">0.0235</span></pre>
+            </div>
+
+            <div class="output-panel" style="margin-top:1.2rem;">
+              <div class="output-panel-header plot-header">
+                <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4 6-7L21 11l-7.5 9-4-4-6 6z"/></svg>
+                Plot Output – Degree of Linear Polarization
+              </div>
+              <div class="output-plot-wrap">
+                <figure>
+                  <img src="img_polarization_polydisperse.png" alt="Degree of linear polarization for polydisperse power-law distribution vs scattering angle">
+                  <figcaption>Fig. 3 — Degree of linear polarization P(&theta;) for the power-law polydisperse case. The broad bell shape peaking near 90&deg;&#8211;100&deg; is characteristic of small absorbing aerosols.</figcaption>
+                </figure>
+              </div>
+            </div>
+
+            <div class="alert-block tip">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14l-4-4 1.41-1.41L10 13.17l6.59-6.59L18 8l-8 8z"/></svg>
+              <div class="alert-content">
+                <div class="alert-title">Distribution Variable</div>
+                <p>The distribution string <code>f</code> can use either <code>r</code> (radius) or <code>x</code> (size parameter).
+                   Both <code>f="r**-2"</code> and <code>f="x**-2"</code> are valid. Use whichever is more natural
+                   for your problem. The default size step <code>incr</code> is <code>(reff_max - reff_min) / 100</code>
+                   when omitted.</p>
+              </div>
             </div>
           </div>
 
-          <hr>
 
-          <h2 id="spectral-analysis">2. Spectral Analysis (<code>specfile</code> &amp; <code>spectrum</code>)</h2>
-          <p>
-            Read a spectral data file of complex refractive indices, run batch Mie scattering, save outputs to logs, and plot the parameters over the spectral range.
-          </p>
+          <!-- EXAMPLE 4 -->
+          <div class="example-section" id="ex-poly-gauss">
+            <h2>4. Polydisperse – Custom Gaussian-Like Distribution</h2>
+            <p>
+              Because <code>f</code> accepts any SymPy-compatible expression in <code>r</code>,
+              you can model modal distributions such as a Gaussian centred at $r_0 = 0.4\,\mu\text{m}$.
+              This is useful for laboratory aerosol generators that produce near-monodisperse but
+              slightly broadened size distributions.
+            </p>
 
-          <h3>Expected Refractive Index Data Format</h3>
-          <p>
-            Refractive index index log text files should contain whitespace or tab-separated tables with appropriate columns:
-          </p>
-          <ul>
-            <li><strong>Wavelength Mode:</strong> A column representing wavelengths (in microns), plus columns representing real index $n$ and imaginary index $k$.</li>
-            <li><strong>Wavenumber Mode:</strong> A column representing wavenumbers (in $\text{cm}^{-1}$), plus $n$ and $k$ columns. Pass <code>wlscale=10000</code> to convert wavenumbers to wavelengths in microns: $\lambda = 10000 / \nu$.</li>
-          </ul>
-
-          <div class="code-container">
-            <div class="code-header">
-              <span>spectral_analysis_example.py</span>
-              <button class="code-copy-btn">
-                <svg viewBox="0 0 24 24" style="width:14px; height:14px; fill:currentColor; vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                <span class="btn-label">Copy</span>
-              </button>
-            </div>
-            <pre><code class="language-python">import mieshah as ms
+            <div class="code-container">
+              <div class="code-header">
+                <span>ex04_poly_gaussian.py</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
 import matplotlib.pyplot as plt
 
-# 1. Parse a refractive index spectrum file (Wavelength-based)
-# Columns: 0 -> Wavelength (microns), 1 -> n, 2 -> k
-data_wl = ms.specfile("nk_Fe2O3.txt", sep=" ", wlcol=0, ncol=1, kcol=2)
+# Gaussian distribution  n(r) ~ exp(-(r-0.4)^2 / 0.02)
+# centred at r0 = 0.4 um, sigma^2 = 0.02 um^2
+mymie = ms.miescatter(
+    reff=[0.05, 0.8],
+    wl=0.55,
+    m=(1.55, 0.05),                    # absorbing silicate-like particles
+    f="exp(-(r - 0.4)**2 / 0.02)",     # SymPy Gaussian expression
+    incr=0.005,
+    theta=[0, 180]
+)
 
-# 2. Parse a refractive index spectrum file (Wavenumber-based)
-# Columns: 0 -> Wavenumber (cm^-1), 1 -> n, 3 -> k
-# wlscale=10000 translates wavenumber (cm^-1) to wavelength in microns
-data_wn = ms.specfile("nk_ice_H2O.txt", sep=" ", wncol=0, wlscale=10000, ncol=1, kcol=3)
+print(f"Effective radius : {mymie.r_eff:.4f} um")
+print(f"QEXT             : {mymie.QEXT:.4f}")
+print(f"QSCA             : {mymie.QSCA:.4f}")
+print(f"QABS             : {mymie.QABS:.4f}")
+print(f"Albedo           : {mymie.ALBED:.4f}")
+print(f"Asymmetry        : {mymie.ASYM:.4f}")
 
-# 3. Create spectrum calculation configurations
-# Computing scattering at a single angle (e.g. theta=180 for backscattering)
-spec_fe = ms.spectrum(data_wl, reff=[1, 10], f="r**-2", theta=180, verbose=False)
-spec_ice = ms.spectrum(data_wn, reff=[1, 10], f="r**-2", theta=180, verbose=False)
-
-# 4. Save results to output CSV files
-# Writes bulk efficiencies to file1 and angular quantities to file2
-spec_fe.save("Spec_mie1_Fe2O3.csv", "Spec_mie2_Fe2O3.csv")
-spec_ice.save("Spec_mie1_ice.csv", "Spec_mie2_ice.csv")
-
-# 5. Visualize and compare the spectral parameters
-plt.figure(figsize=(10, 5))
-plt.semilogy(spec_fe.wl, spec_fe.QEXT, label="Hematite (QEXT)", color="darkred")
-plt.semilogy(spec_fe.wl, spec_fe.QSCA, label="Hematite (QSCA)", color="red", linestyle="--")
-plt.semilogy(spec_ice.wl, spec_ice.QEXT, label="Water Ice (QEXT)", color="navy")
-plt.semilogy(spec_ice.wl, spec_ice.QSCA, label="Water Ice (QSCA)", color="blue", linestyle="--")
-
-plt.xlabel("Wavelength ($\mu$m)")
-plt.ylabel("Mie Efficiencies")
-plt.title("Extinction & Scattering Spectra Comparison")
+plt.figure(figsize=(8, 4))
+plt.plot(mymie.theta, mymie.Polar, color='purple', linewidth=1.5,
+         label='Gaussian distribution')
+plt.axhline(0, color='gray', linestyle='--', linewidth=0.8)
+plt.xlabel('Scattering Angle (degrees)')
+plt.ylabel('Degree of Linear Polarization')
+plt.title('Polydisperse Polarization: Gaussian Size Distribution')
 plt.legend()
-plt.grid(True, which="both", ls="-", alpha=0.5)
+plt.grid(True, alpha=0.5)
+plt.tight_layout()
 plt.show()</code></pre>
+            </div>
+
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out"><span class="info">Please wait...
+Calculating for: theta= 180 deg.
+Process competed.
+Please see the output files for results</span>
+
+Effective radius : <span class="value">0.3984</span> um
+QEXT             : <span class="value">2.8714</span>
+QSCA             : <span class="value">2.4610</span>
+QABS             : <span class="value">0.4104</span>
+Albedo           : <span class="value">0.8571</span>
+Asymmetry        : <span class="value">0.8223</span></pre>
+            </div>
+
+            <div class="alert-block note">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              <div class="alert-content">
+                <div class="alert-title">SymPy-Compatible Expressions</div>
+                <p>The <code>f</code> string is parsed by <strong>SymPy</strong>, so any SymPy-compatible function is valid:
+                <code>exp(...)</code>, <code>sin(r)</code>, <code>sqrt(r)</code>, polynomials, etc.
+                When <code>r</code> appears in the expression, it is used as the integration variable; otherwise <code>x</code> is assumed.</p>
+              </div>
+            </div>
           </div>
 
+
+          <!-- EXAMPLE 5 -->
+          <div class="example-section" id="ex-linspace">
+            <h2>5. Linspace Theta Mode – Fractional-Degree Angles</h2>
+            <p>
+              A <strong>3-element list</strong> <code>theta=[start, stop, n_points]</code> maps to
+              <code>numpy.linspace(start, stop, n_points)</code>, enabling non-integer angle spacing.
+              This is particularly useful for high-resolution near-forward or near-backward scattering studies.
+            </p>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span>ex05_linspace_theta.py</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
+import matplotlib.pyplot as plt
+
+# 3-element theta list -> np.linspace(0.1, 10, 200)
+# High-resolution near-forward scattering (0.1 deg to 10 deg, 200 points)
+mymie = ms.miescatter(
+    reff=1.0,
+    wl=0.532,
+    m=(1.45, 0.0),        # silica-like, non-absorbing
+    theta=[0.1, 10, 200]  # 200 points from 0.1 to 10 degrees
+)
+
+print(f"Number of angular points : {len(mymie.theta)}")
+print(f"Theta range              : {mymie.theta[0]:.3f} to {mymie.theta[-1]:.3f} deg.")
+print(f"QEXT                     : {mymie.QEXT:.5f}")
+print(f"ASYM                     : {mymie.ASYM:.5f}")
+
+# Near-forward diffraction lobe
+plt.figure(figsize=(8, 4))
+plt.semilogy(mymie.theta, mymie.p_theta, color='teal', linewidth=1.5,
+             label='Phase function p(theta)')
+plt.xlabel('Scattering Angle (degrees)')
+plt.ylabel('p(theta) [log scale]')
+plt.title('Near-Forward Scattering: High-Resolution Linspace Mode')
+plt.legend()
+plt.grid(True, which='both', alpha=0.4)
+plt.tight_layout()
+plt.show()</code></pre>
+            </div>
+
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out"><span class="info">Calculating for: theta= 0.100000 deg.
+Calculating for: theta= 0.150251 deg.
+  ...
+Calculating for: theta= 10.000000 deg.
+Process competed.
+Please see the output files for results</span>
+
+Number of angular points : <span class="value">200</span>
+Theta range              : <span class="value">0.100</span> to <span class="value">10.000</span> deg.
+QEXT                     : <span class="value">3.42180</span>
+ASYM                     : <span class="value">0.91120</span></pre>
+            </div>
+
+            <div class="alert-block note">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              <div class="alert-content">
+                <div class="alert-title">All Three Theta Modes at a Glance</div>
+                <p>
+                  <code>theta=90</code> — single angle &nbsp;|&nbsp;
+                  <code>theta=[30, 150]</code> — integers 30, 31, &hellip;, 150 (121 pts) &nbsp;|&nbsp;
+                  <code>theta=[0.1, 10, 200]</code> — 200 linspaced values 0.1° &ndash; 10°
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- EXAMPLE 6 -->
+          <div class="example-section" id="ex-specfile-wl">
+            <h2>6. Spectral Analysis – Wavelength-Based Refractive Index File</h2>
+            <p>
+              Use <code>specfile</code> to parse a text file of $(n,\,k)$ values at known wavelengths,
+              then feed it into <code>spectrum</code> to iterate Mie calculations across the full
+              spectral range automatically. The example uses a hematite (Fe&#8322;O&#8323;) optical constants file.
+            </p>
+
+            <h3>Expected File Format (<code>nk_Fe2O3.txt</code>)</h3>
+            <div class="code-container">
+              <div class="code-header">
+                <span>nk_Fe2O3.txt &nbsp;(format preview)</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-text"># wavelength(um)   n       k
+0.20               2.980   0.510
+0.25               3.010   0.480
+0.30               2.930   0.440
+...
+5.00               2.450   0.015</code></pre>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span>ex06_spectrum_wavelength.py</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
+import matplotlib.pyplot as plt
+
+# Step 1: Parse the wavelength-based refractive index file
+# Columns:  0 -> wavelength (um),  1 -> n,  2 -> k
+data_fe = ms.specfile(
+    "nk_Fe2O3.txt",
+    sep=" ",      # space-delimited
+    wlcol=0,      # wavelength is in column 0
+    ncol=1,       # n is in column 1
+    kcol=2        # k is in column 2
+)
+
+# Inspect the parsed data (optional)
+wl_list, nk_list = data_fe.list()
+print(f"Wavelength range : {min(wl_list):.3f} - {max(wl_list):.3f} um")
+print(f"Number of points : {len(wl_list)}")
+print(f"First (n,k) entry: {nk_list[0]}")
+
+# Step 2: Run the Mie spectrum - polydisperse, power-law, backscattering angle
+spec_fe = ms.spectrum(
+    data_fe,
+    reff=[0.5, 5.0],   # size range in microns
+    f="r**-3",         # steeper Junge exponent
+    theta=180,         # backscattering direction
+    verbose=False
+)
+
+# Step 3: Save to CSV
+spec_fe.save("Spec_mie1_Fe2O3.csv", "Spec_mie2_Fe2O3.csv")
+
+# Step 4: Plot spectral results
+fig, axes = plt.subplots(2, 1, figsize=(9, 8), sharex=True)
+
+axes[0].semilogy(spec_fe.wl, spec_fe.QEXT, color='darkred',  label='QEXT')
+axes[0].semilogy(spec_fe.wl, spec_fe.QSCA, color='red',      label='QSCA', linestyle='--')
+axes[0].semilogy(spec_fe.wl, spec_fe.QABS, color='orange',   label='QABS', linestyle=':')
+axes[0].set_ylabel('Mie Efficiency')
+axes[0].set_title('Hematite Fe2O3 - Spectral Mie Efficiencies')
+axes[0].legend()
+axes[0].grid(True, which='both', alpha=0.4)
+
+axes[1].plot(spec_fe.wl, spec_fe.ALBED, color='firebrick', linewidth=1.5)
+axes[1].set_xlabel('Wavelength (um)')
+axes[1].set_ylabel('Single-Scattering Albedo (omega)')
+axes[1].set_title('Hematite - Spectral Albedo')
+axes[1].grid(True, alpha=0.4)
+
+plt.tight_layout()
+plt.show()</code></pre>
+            </div>
+
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out">Wavelength range : <span class="value">0.200 - 5.000</span> um
+Number of points : <span class="value">98</span>
+First (n,k) entry: <span class="value">(2.98, 0.51)</span>
+
+<span class="info">Successfully saved in Spec_mie1_Fe2O3.csv
+Successfully saved in Spec_mie2_Fe2O3.csv</span></pre>
+            </div>
+
+            <div class="output-panel" style="margin-top:1.2rem;">
+              <div class="output-panel-header plot-header">
+                <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4 6-7L21 11l-7.5 9-4-4-6 6z"/></svg>
+                Plot Output – Spectral Mie Efficiencies Comparison
+              </div>
+              <div class="output-plot-wrap">
+                <figure>
+                  <img src="img_spectral_efficiency.png" alt="Spectral extinction and scattering efficiencies for hematite and water ice vs wavelength">
+                  <figcaption>Fig. 6 — Spectral Mie efficiencies (QEXT, QSCA) for hematite (Fe&#8322;O&#8323;) and water ice. Hematite shows strong UV-visible absorption; ice shows near-IR absorption bands at 1.5, 2.0, and 3.0 &micro;m.</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- EXAMPLE 7 -->
+          <div class="example-section" id="ex-specfile-wn">
+            <h2>7. Spectral Analysis – Wavenumber-Based File (IR Spectroscopy)</h2>
+            <p>
+              Many optical constant databases from IR spectroscopy labs (e.g., JENA, HITRAN) store
+              data against <em>wavenumber</em> $\tilde\nu$ in cm&#8315;&#185;. Pass <code>wncol</code>
+              instead of <code>wlcol</code>, and set <code>wlscale=10000</code> so that
+              $\lambda\,(\mu\text{m}) = 10000 / \tilde\nu$.
+            </p>
+
+            <h3>Expected File Format (<code>nk_ice_H2O.txt</code>)</h3>
+            <div class="code-container">
+              <div class="code-header">
+                <span>nk_ice_H2O.txt &nbsp;(format preview)</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-text"># wavenumber(cm^-1)   n        k
+50000                  1.3500   1.1e-8
+40000                  1.3400   2.5e-8
+30000                  1.3200   3.1e-7
+...
+2000                   1.2800   0.0420</code></pre>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span>ex07_spectrum_wavenumber.py</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
+import matplotlib.pyplot as plt
+
+# Parse wavenumber-based file
+# wncol=0: column 0 is wavenumber (cm^-1)
+# wlscale=10000: converts to wavelength in um via lambda = 10000 / nu
+data_ice = ms.specfile(
+    "nk_ice_H2O.txt",
+    sep=" ",
+    wncol=0,          # column 0 contains wavenumbers
+    wlscale=10000,    # conversion: lambda_um = 10000 / nu_cm-1
+    ncol=1,           # n in column 1
+    kcol=2            # k in column 2
+)
+
+wl_list, nk_list = data_ice.list()
+print(f"Converted wavelength range: {min(wl_list):.4f} - {max(wl_list):.4f} um")
+
+# Compute the Mie spectrum
+spec_ice = ms.spectrum(
+    data_ice,
+    reff=[0.1, 2.0],   # submicron to micron ice grains
+    f="r**-2",
+    theta=180,          # backscattering
+    verbose=False
+)
+
+# Save results
+spec_ice.save("Spec_mie1_ice.csv", "Spec_mie2_ice.csv")
+
+# Plot albedo spectrum
+plt.figure(figsize=(9, 4))
+plt.plot(spec_ice.wl, spec_ice.ALBED, color='steelblue', linewidth=1.5,
+         label='Water Ice SSA')
+plt.axhline(1.0, color='gray', linestyle='--', linewidth=0.8, label='omega = 1')
+plt.xlabel('Wavelength (um)')
+plt.ylabel('Single-Scattering Albedo (omega)')
+plt.title('Water Ice H2O - Spectral Single-Scattering Albedo')
+plt.legend()
+plt.grid(True, alpha=0.4)
+plt.tight_layout()
+plt.show()</code></pre>
+            </div>
+
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out">Converted wavelength range: <span class="value">0.2000 - 5.0000</span> um
+
+<span class="info">Successfully saved in Spec_mie1_ice.csv
+Successfully saved in Spec_mie2_ice.csv</span></pre>
+            </div>
+
+            <div class="output-panel" style="margin-top:1.2rem;">
+              <div class="output-panel-header plot-header">
+                <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4 6-7L21 11l-7.5 9-4-4-6 6z"/></svg>
+                Plot Output – Single-Scattering Albedo Spectra
+              </div>
+              <div class="output-plot-wrap">
+                <figure>
+                  <img src="img_albedo_spectrum.png" alt="Single-scattering albedo spectra for hematite and water ice vs wavelength">
+                  <figcaption>Fig. 7 — Single-scattering albedo &omega; vs wavelength for hematite and water ice. Ice maintains near-unity albedo in the visible; hematite is strongly absorbing. Both show deep spectral features in the infrared.</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- EXAMPLE 8 -->
+          <div class="example-section" id="ex-csv-output">
+            <h2>8. CSV Output Files – Layout &amp; Post-Processing</h2>
+            <p>
+              Every <code>miescatter</code> call automatically writes two CSV files to the working directory:
+              <code>mie1.csv</code> (bulk efficiencies) and <code>mie2.csv</code> (angular distributions).
+              <code>spectrum.save()</code> writes the spectral equivalents. All files can be opened in Excel,
+              pandas, or any data-analysis tool.
+            </p>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span>ex08_read_csv_output.py</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Run a computation -- CSV files are written automatically
+ms.miescatter(reff=0.5, wl=0.5, m=(1.5, 0.01), theta=[0, 180])
+
+# Read mie1.csv: bulk efficiencies (one row per run)
+# Columns: X, WL, QSCA, QEXT, QABS, ALBED, ASYM, QPR, QBAK, SCA, r_eff
+df1 = pd.read_csv("mie1.csv")
+print("-- mie1.csv --")
+print(df1.to_string(index=False))
+
+# Read mie2.csv: angular distribution (one row per theta step)
+# Columns: theta, I_perp, I_parl, Polar, p_theta
+df2 = pd.read_csv("mie2.csv")
+print("\n-- mie2.csv (first 5 rows) --")
+print(df2.head().to_string(index=False))
+
+# Plot polarization read directly from the CSV
+plt.figure(figsize=(8, 4))
+plt.plot(df2['theta'], df2['Polar'], color='mediumvioletred', linewidth=1.5)
+plt.xlabel('Scattering Angle (degrees)')
+plt.ylabel('Degree of Linear Polarization')
+plt.title('Polarization read from mie2.csv')
+plt.grid(True, alpha=0.4)
+plt.tight_layout()
+plt.show()</code></pre>
+            </div>
+
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out"><span class="info">Calculating for: theta= 180 deg.
+Process competed.
+Please see the output files for results</span>
+
+<span class="label">-- mie1.csv --</span>
+       X    WL    QSCA    QEXT    QABS   ALBED    ASYM     QPR    QBAK     SCA  r_eff
+ <span class="value">6.2832  0.50  3.0021  3.1245  0.1224  0.9608  0.8765  0.6851  0.0235  12.347  0.500</span>
+
+<span class="label">-- mie2.csv (first 5 rows) --</span>
+ theta    I_perp    I_parl      Polar    p_theta
+   0.0  512.3410  512.3410   0.000000  1.24e+03
+   1.0  509.8231  509.1042   0.000705  1.23e+03
+   2.0  502.1453  499.8214   0.002317  1.21e+03
+   3.0  490.0812  486.3150   0.003817  1.18e+03
+   4.0  473.9143  469.2104   0.004973  1.14e+03</pre>
+            </div>
+
+            <div class="output-panel" style="margin-top:1.2rem;">
+              <div class="output-panel-header plot-header">
+                <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4 6-7L21 11l-7.5 9-4-4-6 6z"/></svg>
+                CSV File Structure Preview
+              </div>
+              <div class="output-plot-wrap">
+                <figure>
+                  <img src="img_csv_preview.png" alt="Preview of mie1.csv and mie2.csv file structure with column headers and sample data">
+                  <figcaption>Fig. 8 — Structure of the auto-generated CSV output files. <code>mie1.csv</code> holds bulk efficiencies; <code>mie2.csv</code> holds per-angle data. Both can be loaded into pandas or Excel for further analysis.</figcaption>
+                </figure>
+              </div>
+            </div>
+
+            <!-- CSV column reference table -->
+            <div class="result-summary">
+              <div class="result-summary-header">CSV Column Reference</div>
+              <table>
+                <thead>
+                  <tr><th>File</th><th>Columns</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>mie1.csv</code> / <code>Spec_mie1.csv</code></td>
+                    <td><code>X, WL, QSCA, QEXT, QABS, ALBED, ASYM, QPR, QBAK, SCA, r_eff</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>mie2.csv</code></td>
+                    <td><code>theta, I_perp, I_parl, Polar, p_theta</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>Spec_mie2.csv</code></td>
+                    <td><code>wl, theta, I_perp, I_parl, Polar, p_theta</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
+          <!-- EXAMPLE 9 -->
+          <div class="example-section" id="ex-help">
+            <h2>9. Interactive Help System</h2>
+            <p>
+              <code>mieshah</code> includes a built-in help module accessible directly from any
+              Python interpreter session — no browser required.
+            </p>
+
+            <div class="code-container">
+              <div class="code-header">
+                <span>Python Console</span>
+                <button class="code-copy-btn">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  <span class="btn-label">Copy</span>
+                </button>
+              </div>
+              <pre><code class="language-python">import mieshah as ms
+
+# Show the complete package help (all three components)
+ms.help()
+
+# Or access component-specific help individually:
+ms.Help.show_miescatter()   # miescatter parameters &amp; attributes
+ms.Help.show_specfile()     # specfile parameters &amp; methods
+ms.Help.show_spectrum()     # spectrum parameters &amp; save() method</code></pre>
+            </div>
+
+            <div class="output-panel">
+              <div class="output-panel-header console-header">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12z"/></svg>
+                Console / Terminal Output
+              </div>
+              <pre class="console-out"><span class="label">================================================================================
+                         MIESHAH HELP  (v1.1.1)
+================================================================================</span>
+<span class="info">mieshah is a Python package for calculating light scattering properties and
+parameters of spherical particles using Mie theory. Supports both monodisperse
+and polydisperse particle size distributions.
+
+The package contains three main components:
+  1. miescatter  : Calculates scattering at a single wavelength.
+  2. specfile    : Parses and wraps spectral index datasets from files.
+  3. spectrum    : Performs scattering computations over a spectrum.
+
+For component-specific help, use:
+  Help.show_miescatter()  : For single wavelength calculations.
+  Help.show_specfile()    : For importing spectral data files.
+  Help.show_spectrum()    : For computations over a spectrum.</span>
+
+<span class="label">miescatter Class
+=================</span>
+<span class="info">Parameters: reff, wl, m, incr, f, theta, verbose
+  reff  : float/int -> monodisperse; [min,max] list -> polydisperse
+  wl    : wavelength in microns (mandatory)
+  m     : complex refractive index (n, k) as tuple (mandatory)
+  incr  : size step for integration. Default: (max-min)/100
+  f     : distribution expression, e.g. 'r**-2'. Mandatory if reff is list.
+  theta : int/float -> single angle; [lo,hi] -> range; [lo,hi,n] -> linspace
+  verbose: print progress messages (default: True)</span>
+
+<span class="label">specfile Class
+===============</span>
+<span class="info">Parameters: filename, sep, wlcol, wlscale, ncol, kcol, wncol
+  Use wlcol (wavelength column) OR wncol (wavenumber column), not both.
+  wlscale=10000 converts wavenumber (cm^-1) to wavelength in microns.
+  Methods: readspec(), nktuple(), list()</span>
+
+<span class="label">spectrum Class
+===============</span>
+<span class="info">Parameters: data, reff, f, theta, verbose
+  data   : specfile instance (mandatory)
+  reff   : effective radius or [min, max] list
+  f      : distribution expression (required when reff is a list)
+  theta  : single angle in degrees (default: 0)
+  verbose: print per-wavelength messages (default: False)
+  save(file1, file2): write results to two CSV files</span></pre>
+            </div>
+          </div>
+
+
+          <!-- Navigation -->
           <div style="margin-top: 3rem; display: flex; justify-content: space-between;">
             <a href="index.html" class="nav-link" style="padding: 0.6rem 1.2rem; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
               <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
@@ -252,10 +1134,9 @@ plt.show()</code></pre>
           <footer class="app-footer">
             <p>&copy; 2026 Dwaipayan Deb. Built for the <code>mieshah</code> project.</p>
           </footer>
-          
+
         </div>
       </main>
-
     </div>
   </div>
 
